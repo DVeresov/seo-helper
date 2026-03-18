@@ -2,4 +2,5 @@
 .env
 .claude
 backlog.md
-/storage
+/storage/
+/vendor/
