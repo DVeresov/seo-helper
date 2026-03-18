@@ -1,16 +1,17 @@
 <?php
 declare(strict_types=1);
 
-use App\App;
+use Framework\Http\Kernel;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 define('APP_PATH', dirname(__DIR__));
 
 require_once APP_PATH . '/vendor/autoload.php';
 
+$request = Request::createFromGlobals();
 
-$app = new App();
+$kernel = new Kernel();
+$response = $kernel->handler($request);
 
-
-$hello = $app->hello();
-
-echo $hello;
+$response->send();
