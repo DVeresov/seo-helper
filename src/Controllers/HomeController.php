@@ -15,4 +15,10 @@ class HomeController
         return new Response($content);
     }
 
+    public function project(int $id): Response
+    {
+        $content = "<h1>hello world from HomeController project: #$id</h1>";
+
+        return new Response($content);
+    }
 }

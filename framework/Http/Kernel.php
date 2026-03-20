@@ -28,9 +28,13 @@ class Kernel
 
         $routeInfo = $dispatcher->dispatch($method, $uri);
 
-        [$status, $handler, $vars] = $routeInfo;
+        [$status, [$controller, $method], $vars] = $routeInfo;
 
-        return $handler($vars);
+        $response = call_user_func_array([new $controller, $method], [
+            'id' => $vars['id']
+        ]);
+
+        return $response;
     }
 
 }

@@ -6,4 +6,5 @@ use Framework\Routing\Router;
 
 return [
     Router::get('/', [HomeController::class, 'hello']),
+    Router::get('/project/{id:\d+}', [HomeController::class, 'project']),
 ];
