@@ -7,7 +7,29 @@ namespace Framework\Exception;
 use Throwable;
 use Exception;
 
-class HttpException extends Exception
+class HttpException extends \Exception
 {
+    protected $message;
+    private int $statusCode;
+
+    /**
+     * @param int $statusCode
+     */
+    public function __construct($message, int $statusCode=500)
+    {
+        $this->statusCode = $statusCode;
+        parent::__construct($message, $statusCode);
+    }
+
+    public function getStatusCode(): int
+    {
+        return $this->statusCode;
+    }
+
+    public function setStatusCode(int $statusCode): HttpException
+    {
+        $this->statusCode = $statusCode;
+        return $this;
+    }
 
 }

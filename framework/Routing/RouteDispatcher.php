@@ -48,11 +48,11 @@ class RouteDispatcher implements RouteDispatcherInterface
 
         $result = match ($routeInfo[0]) {
             Dispatcher::NOT_FOUND =>
-            throw new HttpException('404 Not Found', 404),
+            throw (new HttpException('404 Not Found'))->setStatusCode(404),
             Dispatcher::METHOD_NOT_ALLOWED =>
-            throw new MethodNotFoundException('405 Method Not Allowed', 405),
+            throw (new MethodNotFoundException('405 Method Not Allowed'))->setStatusCode(405),
             Dispatcher::FOUND => null,
-            default => throw new HttpException('Unknown routing status', 500),
+            default => throw (new HttpException('Unknown routing status'))->setStatusCode(500),
         };
 
         [$status, $handler, $vars] = $routeInfo;

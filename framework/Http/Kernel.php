@@ -26,11 +26,8 @@ class Kernel
 
             $response = call_user_func_array($routeHandler, $vars);
         }
-        catch (MethodNotFoundException $e) {
-            $response = new Response($e->getMessage(), Response::HTTP_METHOD_NOT_ALLOWED);
-        }
         catch (HttpException $e) {
-            $response = new Response($e->getMessage(), Response::HTTP_NOT_FOUND);
+            $response = new Response($e->getMessage(), Response::HTTP_METHOD_NOT_ALLOWED);
         }
         catch (\Throwable $e) {
             $response = new Response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
