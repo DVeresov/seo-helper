@@ -30,9 +30,7 @@ class Kernel
 
         [$status, [$controller, $method], $vars] = $routeInfo;
 
-        $response = call_user_func_array([new $controller, $method], [
-            'id' => $vars['id']
-        ]);
+        $response = call_user_func_array([new $controller, $method], $vars);
 
         return $response;
     }
