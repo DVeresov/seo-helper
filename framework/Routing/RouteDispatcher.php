@@ -6,17 +6,27 @@ namespace Framework\Routing;
 
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
+use Framework\Exception\HttpException;
+use Framework\Exception\MethodNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use function FastRoute\simpleDispatcher;
 
 class RouteDispatcher implements RouteDispatcherInterface
 {
+    /**
+     * @throws HttpException
+     */
     public function dispatch(Request $request): array
     {
-        $routeInfo = $this->extractRouteInfo($request);
-        [[$controller, $method], $vars] = $routeInfo;
+        [$handler, $vars] = $this->extractRouteInfo($request);
 
-        return [[new $controller, $method], $vars];
+        if (is_array($handler)) {
+            [$controller, $method] = $handler;
+            return [[new $controller, $method], $vars];
+        }
+
+        return [$handler, $vars];
+
     }
 
     private function extractRouteInfo(Request $request): array
@@ -38,16 +48,16 @@ class RouteDispatcher implements RouteDispatcherInterface
 
         $result = match ($routeInfo[0]) {
             Dispatcher::NOT_FOUND =>
-            throw new \HttpException('404 Not Found', 404),
+            throw new HttpException('404 Not Found', 404),
             Dispatcher::METHOD_NOT_ALLOWED =>
-            throw new \HttpException('405 Method Not Allowed', 405),
+            throw new MethodNotFoundException('405 Method Not Allowed', 405),
             Dispatcher::FOUND => null,
-            default => throw new \RuntimeException('Unknown routing status', 500),
+            default => throw new HttpException('Unknown routing status', 500),
         };
 
-        [$status, [$controller, $method], $vars] = $routeInfo;
+        [$status, $handler, $vars] = $routeInfo;
 
-        return [[$controller, $method], $vars];
+        return [$handler, $vars];
     }
 
 }

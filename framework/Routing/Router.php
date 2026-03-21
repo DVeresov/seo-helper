@@ -6,7 +6,7 @@ namespace Framework\Routing;
 
 class Router
 {
-    public static function get(string $uri, array $handler): array
+    public static function get(string $uri, array|callable $handler): array
     {
         return ['GET', $uri, $handler];
     }

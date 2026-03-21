@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Framework\Http;
 
 use FastRoute\RouteCollector;
+use Framework\Exception\HttpException;
+use Framework\Exception\MethodNotFoundException;
 use Framework\Routing\RouteDispatcher;
 use Framework\Routing\RouteDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +25,14 @@ class Kernel
             [$routeHandler, $vars] = $this->router->dispatch($request);
 
             $response = call_user_func_array($routeHandler, $vars);
-        } catch (\Throwable $e) {
+        }
+        catch (MethodNotFoundException $e) {
+            $response = new Response($e->getMessage(), Response::HTTP_METHOD_NOT_ALLOWED);
+        }
+        catch (HttpException $e) {
+            $response = new Response($e->getMessage(), Response::HTTP_NOT_FOUND);
+        }
+        catch (\Throwable $e) {
             $response = new Response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
