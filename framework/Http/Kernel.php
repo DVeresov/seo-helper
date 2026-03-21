@@ -19,9 +19,13 @@ class Kernel
 
     public function handler(Request $request): Response
     {
-        [$routeHandler, $vars] = $this->router->dispatch($request);
+        try {
+            [$routeHandler, $vars] = $this->router->dispatch($request);
 
-        $response = call_user_func_array($routeHandler, $vars);
+            $response = call_user_func_array($routeHandler, $vars);
+        } catch (\Throwable $e) {
+            $response = new Response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
         return $response;
     }
