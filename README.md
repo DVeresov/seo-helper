@@ -79,8 +79,7 @@ docker compose exec app composer install
 Маршруты определяются в `routes/web.php`:
 
 ```php
-use App\Controllers\HomeController;
-use Framework\Routing\Router;
+use App\Controllers\HomeController;use Framework\Routing\Router;
 
 return [
     Router::get('/', [HomeController::class, 'hello']),

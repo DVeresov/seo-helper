@@ -4,7 +4,6 @@ declare(strict_types=1);
 use Framework\Http\Kernel;
 use Framework\Routing\RouteDispatcher;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 define('APP_PATH', dirname(__DIR__));
 

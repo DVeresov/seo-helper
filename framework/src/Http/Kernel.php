@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 namespace Framework\Http;
 
-use FastRoute\RouteCollector;
 use Framework\Exception\HttpException;
-use Framework\Exception\MethodNotFoundException;
-use Framework\Routing\RouteDispatcher;
 use Framework\Routing\RouteDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function FastRoute\simpleDispatcher;
 
 class Kernel
 {
