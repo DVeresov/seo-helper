@@ -29,4 +29,30 @@ class ContainerTest extends TestCase
 
     }
 
+    public function test_has_method()
+    {
+        $container = new Container();
+
+        $container->add('framework-class', FrameworkClass::class);
+
+        $this->assertTrue($container->has('framework-class'));
+        $this->assertFalse($container->has('empty'));
+
+    }
+
+    public function test_recursively_autowrited()
+    {
+        $container = new Container();
+
+        $container->add('framework-class', FrameworkClass::class);
+
+        $frameworkClass = $container->get('framework-class');
+
+        $someClass = $frameworkClass->getSomeClass();
+
+        $this->assertInstanceOf(SomeClass::class, $frameworkClass->getSomeClass());
+        $this->assertInstanceOf(Fake::class, $someClass->getFake());
+
+    }
+
 }
