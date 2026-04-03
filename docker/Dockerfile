@@ -1,4 +1,4 @@
-FROM php:8.4-fpm
+FROM php:8.5-fpm
 
 RUN apt-get update && apt-get install -y \
     curl \
@@ -7,14 +7,18 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     libzip-dev \
     libicu-dev \
+    libonig-dev \
     libcurl4-openssl-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+RUN docker-php-ext-configure intl
+
 RUN docker-php-ext-install \
     pdo_mysql \
-    dom \
+    mbstring \
     zip \
-    intl
+    intl \
+    xml
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 

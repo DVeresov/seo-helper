@@ -13,6 +13,8 @@ use function FastRoute\simpleDispatcher;
 
 class RouteDispatcher implements RouteDispatcherInterface
 {
+    private array $routes;
+
     /**
      * @throws HttpException
      */
@@ -29,13 +31,16 @@ class RouteDispatcher implements RouteDispatcherInterface
 
     }
 
+    public function registerRoutes(array $routes): void
+    {
+        $this->routes = $routes;
+    }
+
     private function extractRouteInfo(Request $request): array
     {
         $dispatcher = simpleDispatcher(function (RouteCollector $collector) {
 
-            $routes = include_once APP_PATH . '/routes/web.php';
-
-            foreach ($routes as $route) {
+            foreach ($this->routes as $route) {
                 $collector->addRoute(...$route);
             }
 
