@@ -19,6 +19,7 @@
     "symfony/var-dumper": "^8.0"
   },
   "require": {
-    "dv/web-seo-helper": "dev-main"
+    "dv/web-seo-helper": "dev-main",
+    "symfony/dotenv": "^8.0"
   }
 }

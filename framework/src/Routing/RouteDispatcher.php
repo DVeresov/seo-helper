@@ -8,6 +8,7 @@ use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 use Framework\Exception\HttpException;
 use Framework\Exception\MethodNotFoundException;
+use League\Container\Container;
 use Symfony\Component\HttpFoundation\Request;
 use function FastRoute\simpleDispatcher;
 
@@ -18,12 +19,14 @@ class RouteDispatcher implements RouteDispatcherInterface
     /**
      * @throws HttpException
      */
-    public function dispatch(Request $request): array
+    public function dispatch(Request $request, Container $container): array
     {
         [$handler, $vars] = $this->extractRouteInfo($request);
 
         if (is_array($handler)) {
-            [$controller, $method] = $handler;
+            [$controllerId, $method] = $handler;
+            $controller = $container->get($controllerId);
+
             return [[new $controller, $method], $vars];
         }
 
