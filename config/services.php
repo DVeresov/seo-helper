@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use Framework\Controller\AbstractController;
 use Framework\Http\Kernel;
 use League\Container\Argument\Literal\ArrayArgument;
 use League\Container\Argument\Literal\StringArgument;
@@ -8,9 +9,11 @@ use League\Container\Container;
 use \Framework\Routing\RouteDispatcherInterface;
 use \Framework\Routing\RouteDispatcher;
 use League\Container\ReflectionContainer;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Dotenv\Dotenv;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
+use Twig\Loader\LoaderInterface;
 
 $dotenv = new Dotenv();
 $dotenv->loadEnv(APP_PATH . '/.env');
@@ -37,10 +40,12 @@ $container->add(Kernel::class)->addArgument(RouteDispatcherInterface::class)
     ->addArgument($container);
 
 // twig
-$container->addShared('twig-loader', FilesystemLoader::class)
+$container->addShared(LoaderInterface::class, FilesystemLoader::class)
     ->addArgument(new StringArgument($viewPath));
 
-$container->addShared(Environment::class)
-    ->addArgument('twig-loader');
+$container->addShared('twig', Environment::class)
+    ->addArgument(LoaderInterface::class);
+
+$container->addShared(ContainerInterface::class, $container);
 
 return $container;

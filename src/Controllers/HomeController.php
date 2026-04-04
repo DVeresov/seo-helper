@@ -1,22 +1,22 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 
 namespace App\Controllers;
 
+use Framework\Controller\AbstractController;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
-class HomeController
+class HomeController extends AbstractController
 {
-    public function __construct(private Environment $twig)
-    {
-    }
 
     public function hello(): Response
     {
+        $twig = $this->container->get('twig');
+        dd($twig);
 
-        $content = "<h1>hello world from HomeController</h1>";
+        $content = $twig->render('home/index.html.twig');
 
         return new Response($content);
     }
