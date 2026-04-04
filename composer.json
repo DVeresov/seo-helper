@@ -20,6 +20,7 @@
   },
   "require": {
     "dv/web-seo-helper": "dev-main",
-    "symfony/dotenv": "^8.0"
+    "symfony/dotenv": "^8.0",
+    "twig/twig": "^3.24"
   }
 }

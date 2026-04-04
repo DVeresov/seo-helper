@@ -27,7 +27,7 @@ class RouteDispatcher implements RouteDispatcherInterface
             [$controllerId, $method] = $handler;
             $controller = $container->get($controllerId);
 
-            return [[new $controller, $method], $vars];
+            return [[$controller, $method], $vars];
         }
 
         return [$handler, $vars];
