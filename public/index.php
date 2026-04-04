@@ -4,17 +4,20 @@ declare(strict_types=1);
 use Framework\Http\Kernel;
 use Framework\Routing\RouteDispatcher;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 define('APP_PATH', dirname(__DIR__));
 
 require_once APP_PATH . '/vendor/autoload.php';
 
+
 $request = Request::createFromGlobals();
 
-$router = new RouteDispatcher();
+/** @var \League\Container\Container $container */
+$container = require APP_PATH . '/config/services.php';
 
-$kernel = new Kernel($router);
+$kernel = $container->get(Kernel::class);
+
 $response = $kernel->handler($request);
 
 $response->send();
+
