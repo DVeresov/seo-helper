@@ -40,12 +40,18 @@ $container->add(Kernel::class)->addArgument(RouteDispatcherInterface::class)
     ->addArgument($container);
 
 // twig
-$container->addShared(LoaderInterface::class, FilesystemLoader::class)
-    ->addArgument(new StringArgument($viewPath));
+// Настройка Twig через фабрику (замыкание)
+$container->addShared(\Twig\Environment::class, function () use ($viewPath) {
+    // 1. Создаем лоадер вручную, жестко передавая путь
+    $loader = new \Twig\Loader\FilesystemLoader($viewPath);
 
-$container->addShared('twig', Environment::class)
-    ->addArgument(LoaderInterface::class);
+    // 2. Создаем и возвращаем сам Twig
+    return new \Twig\Environment($loader, [
+        'cache' => false, // Пока отключаем кэш для разработки
+    ]);
+});
 
-$container->addShared(ContainerInterface::class, $container);
+// Добавляем строковый алиас 'twig', на случай если ты вызываешь $container->get('twig')
+$container->add('twig', $container->get(\Twig\Environment::class));
 
 return $container;
