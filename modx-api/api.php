@@ -1,9 +1,13 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 define('MODX_API_MODE', true);
 
 // подключаем гл файл модХ
-require_once dirname(__FILE__) . '/index.php';
+require_once dirname(__FILE__) . '/../index.php';
 
 //---Логирование
 $modx->getService('error', 'error.modError');
@@ -12,25 +16,31 @@ $modx->setLogTarget('FILE');
 
 //---Доступ
 $headers = getallheaders();
+$headers = array_change_key_case($headers, CASE_LOWER);
+$authHeader = $headers['authorization'] ?? '';
 
 $secretToken = 'JOPA_S_USHAMI';
 
-if (!isset($headers['Authorization']) || $headers['Authorization'] !== 'Bearer' . $secretToken) {
-    http_response_code(401);
-
-    echo json_encode(['error' => 'Unauthorized']);
-    exit();
-}
+//if (!isset($headers['Authorization']) || $headers['Authorization'] !== 'Bearer' . $secretToken) {
+//    http_response_code(401);
+//
+//    echo json_encode(['error' => 'Unauthorized']);
+//    exit();
+//}
 
 $action = $_GET['action'] ?? '';
 
 if ($action === 'get_structure') {
 
-    $c = where([
-        'class_key' => 'msCategory'
-    ]);
+//    $c = $modx->newQuery('msCategory');
+//    $c = where([
+//        'class_key' => 'msCategory'
+//    ]);
 
-    $resource = $modx->getCollection('msCategory', $c);
+    $resource = $modx->getCollection('msCategory', [
+        'class_key' => 'msCategory',
+        'published' => 1,
+    ]);
 
     $result = [];
 
@@ -42,7 +52,7 @@ if ($action === 'get_structure') {
         ];
     }
 
-    return json_encode($result);
+    return json_encode($result, JSON_UNESCAPED_UNICODE);
 }
 
 if ($action === 'get_page') {
