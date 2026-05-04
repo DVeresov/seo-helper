@@ -1,118 +1,58 @@
-# SEO Automation App
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-PHP-приложение для автоматизации рутинных SEO-задач с AI-генерацией контента.
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
-## Текущий статус
+## About Laravel
 
-**Phase 0: MVP Framework Foundation** — базовый каркас приложения
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-## Технологии
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-- **PHP 8.4** (FPM)
-- **Nginx 1.26**
-- **MySQL 8.4**
-- **Docker Compose**
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-### Зависимости
+## Learning Laravel
 
-- `nikic/fast-route` — роутинг
-- `symfony/http-foundation` — HTTP Request/Response
-- `symfony/var-dumper` — отладка (dev)
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-## Структура проекта
+In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-```
-├── docker/                 # Docker-конфигурация
-│   ├── Dockerfile          # PHP 8.4-fpm образ
-│   ├── docker-compose.yaml
-│   └── nginx/nginx.conf
-├── framework/              # Собственный микрофреймворк
-│   ├── Http/
-│   │   └── Kernel.php      # HTTP-ядро приложения
-│   ├── Routing/
-│   │   ├── Router.php      # Хелперы для маршрутов
-│   │   ├── RouteDispatcher.php
-│   │   └── RouteDispatcherInterface.php
-│   └── Exception/
-│       ├── HttpException.php
-│       └── MethodNotFoundException.php
-├── src/                    # Код приложения
-│   ├── App.php
-│   └── Controllers/
-│       └── HomeController.php
-├── routes/
-│   └── web.php             # Определение маршрутов
-├── public/
-│   └── index.php           # Точка входа
-├── storage/                # Хранилище (логи, кэш, MySQL данные)
-└── vendor/                 # Composer-зависимости
-```
+You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
 
-## Установка и запуск
+## Agentic Development
+
+Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
 
 ```bash
-# Клонировать репозиторий
-git clone <repo-url>
-cd web-seo-helper
+composer require laravel/boost --dev
 
-# Скопировать конфигурацию окружения
-cp .env.example .env
-
-# Запустить контейнеры
-cd docker
-docker compose up -d
-
-# Установить зависимости
-docker compose exec app composer install
+php artisan boost:install
 ```
 
-## Доступ к сервисам
+Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
 
-| Сервис      | URL                    |
-|-------------|------------------------|
-| Приложение  | http://localhost:8000  |
-| phpMyAdmin  | http://localhost:8001  |
-| MySQL       | localhost:3308         |
+## Contributing
 
-## Определение маршрутов
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-Маршруты определяются в `routes/web.php`:
+## Code of Conduct
 
-```php
-use App\Controllers\HomeController;use Framework\Routing\Router;
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-return [
-    Router::get('/', [HomeController::class, 'hello']),
-    Router::get('/project/{id:\d+}', [HomeController::class, 'project']),
-    Router::get('/hi/{name}', function (string $name) {
-        return new Response('<h1>Hello ' . $name . '!</h1>');
-    }),
-];
-```
+## Security Vulnerabilities
 
-Поддерживаются:
-- GET/POST методы
-- Параметры в URL с regex-валидацией (`{id:\d+}`)
-- Контроллеры и callable-обработчики
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## Реализованный функционал (Phase 0)
+## License
 
-- [x] Docker-окружение (PHP-FPM + Nginx + MySQL + phpMyAdmin)
-- [x] Nginx-конфигурация с поддержкой PHP и увеличенными таймаутами
-- [x] Роутинг на базе FastRoute
-- [x] HTTP Kernel с обработкой запросов
-- [x] Request/Response (Symfony HttpFoundation)
-- [x] Базовые HTTP-исключения (404, 405, 500)
-- [x] PSR-4 автозагрузка (App\, Framework\)
-- [x] Структура проекта
-
-## Дорожная карта
-
-Подробный план разработки см. в [backlog.md](backlog.md).
-
-**Следующие этапы:**
-1. Phase 1: AI Provider Abstraction Layer (Anthropic, OpenAI, Gemini, YandexGPT)
-2. Phase 2: Генерация SEO-текстов по брифу
-3. Phase 3: Генерация Meta Title + Description
-4. Phase 4: Prompt Manager
-
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

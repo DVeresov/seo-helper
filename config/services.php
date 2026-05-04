@@ -1,37 +1,38 @@
 <?php
-declare(strict_types=1);
 
-use Framework\Http\Kernel;
-use League\Container\Argument\Literal\ArrayArgument;
-use League\Container\Argument\Literal\StringArgument;
-use League\Container\Container;
-use \Framework\Routing\RouteDispatcherInterface;
-use \Framework\Routing\RouteDispatcher;
-use League\Container\ReflectionContainer;
-use Symfony\Component\Dotenv\Dotenv;
+return [
 
-$dotenv = new Dotenv();
-$dotenv->loadEnv(APP_PATH . '/.env');
+    /*
+    |--------------------------------------------------------------------------
+    | Third Party Services
+    |--------------------------------------------------------------------------
+    |
+    | This file is for storing the credentials for third party services such
+    | as Mailgun, Postmark, AWS and more. This file provides the de facto
+    | location for this type of information, allowing packages to have
+    | a conventional file to locate the various service credentials.
+    |
+    */
 
-// Application parameters
+    'postmark' => [
+        'key' => env('POSTMARK_API_KEY'),
+    ],
 
-$routes = include_once APP_PATH . '/routes/web.php';
+    'resend' => [
+        'key' => env('RESEND_API_KEY'),
+    ],
 
-// Application services
+    'ses' => [
+        'key' => env('AWS_ACCESS_KEY_ID'),
+        'secret' => env('AWS_SECRET_ACCESS_KEY'),
+        'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+    ],
 
-$container = new Container();
+    'slack' => [
+        'notifications' => [
+            'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
+            'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
+        ],
+    ],
 
-$container->delegate(new ReflectionContainer(true));
-
-$appEnv = $_ENV['APP_ENV'] ?? 'dev';
-
-$container->add('APP_ENV', new StringArgument($appEnv));
-
-$container->add(RouteDispatcherInterface::class, RouteDispatcher::class);
-
-$container->extend(RouteDispatcherInterface::class)->addMethodCall('registerRoutes', [$routes]);
-
-$container->add(Kernel::class)->addArgument(RouteDispatcherInterface::class)
-->addArgument($container);
-
-return $container;
+];

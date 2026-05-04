@@ -1,13 +1,7 @@
 <?php
-declare(strict_types=1);
 
-use App\Controllers\HomeController;
-use Framework\Routing\Router;
+use Illuminate\Support\Facades\Route;
 
-return [
-    Router::get('/', [HomeController::class, 'hello']),
-    Router::get('/project/{id:\d+}', [HomeController::class, 'project']),
-    Router::get('/hi/{name}', function (string $name) {
-        return new \Symfony\Component\HttpFoundation\Response('<h1>Hello ' . $name . '!</h1>');
-    }),
-];
+Route::get('/', function () {
+    return view('welcome');
+});
