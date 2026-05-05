@@ -9,18 +9,9 @@ define('MODX_API_MODE', true);
 // подключаем гл файл модХ
 require_once dirname(__FILE__) . '/../index.php';
 
-//---Логирование
-$modx->getService('error', 'error.modError');
-$modx->setLogLevel(modX::LOG_LEVEL_INFO);
-$modx->setLogTarget('FILE');
-
-//---Доступ
-$headers = getallheaders();
-$headers = array_change_key_case($headers, CASE_LOWER);
-$authHeader = $headers['authorization'] ?? '';
-
-$secretToken = 'JOPA_S_USHAMI';
-
+// токен для подключения
+//$secretToken = 'JOPA_S_USHAMI';
+//
 //if (!isset($headers['Authorization']) || $headers['Authorization'] !== 'Bearer' . $secretToken) {
 //    http_response_code(401);
 //
@@ -30,29 +21,35 @@ $secretToken = 'JOPA_S_USHAMI';
 
 $action = $_GET['action'] ?? '';
 
-if ($action === 'get_structure') {
+function get_structure() {
 
-//    $c = $modx->newQuery('msCategory');
-//    $c = where([
-//        'class_key' => 'msCategory'
-//    ]);
+    global $modx;
+    $result = [];
 
     $resource = $modx->getCollection('msCategory', [
         'class_key' => 'msCategory',
         'published' => 1,
     ]);
 
-    $result = [];
-
     foreach ($resource as $cat) {
         $result[] = [
             'id' => $cat->get('id'),
             'pagetitle' => $cat->get('pagetitle'),
+            'url' => $modx->makeUrl($cat->get('id'), '', '', 'full'),
             'parent' => $cat->get('parent')
         ];
     }
 
     return json_encode($result, JSON_UNESCAPED_UNICODE);
+}
+
+header('Content-Type: application/json; charset=UTF-8');
+
+if ($action === 'get_structure') {
+    if (ob_get_length()) ob_clean();
+
+    echo get_structure();
+    exit();
 }
 
 if ($action === 'get_page') {
@@ -63,8 +60,6 @@ if ($action === 'get_page') {
     if (!$resource) {
         http_response_code(404);
         echo json_encode(['error' => 'Resource not found']);
-    } else {
-
     }
 
 }
