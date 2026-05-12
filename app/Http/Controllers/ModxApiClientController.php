@@ -13,8 +13,6 @@ class ModxApiClientController extends Controller
         $client = new ModxApiClient();
         $response = $client->getStructure();
 
-        dd($response);
-
         return view('structure', ['structure' => $response]);
     }
 
